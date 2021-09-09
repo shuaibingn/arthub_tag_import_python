@@ -1,4 +1,7 @@
-depot: h3d
-domain: http://arthub-api.h3d.com.cn
-path: C:/Users/Administrator/Desktop/test/arthub_test.xlsx
-token: 2012b
+token: "2012b"
+domain: "http://arthub-api.h3d.com.cn"
+
+depot: "h3d"
+
+asset:
+  h3d: "100002"

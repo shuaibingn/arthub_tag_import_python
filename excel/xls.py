@@ -36,7 +36,8 @@ class XLS(object):
 
         return res
 
-    def write_data(self, data: dict):
-        index = data.get("index")
-        self.xlwt_ws.write(index[0], index[1], "是")
+    def write_data(self, data: list):
+        for d in data:
+            index = d.get("index")
+            self.xlwt_ws.write(index[0], index[1], "是")
         self.xlwt_wb.save(self.filename)

@@ -1,7 +1,6 @@
 default_settings = {
     "depot": "h3d",
     "domain": "http://arthub-api.h3d.com.cn",
-    "path": "",
     "token": "2012b"
 }
 

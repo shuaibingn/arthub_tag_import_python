@@ -12,5 +12,5 @@ class Excel(object):
     def read_data(self) -> list:
         return self.instance.read_data()
 
-    def write_data(self, data: dict):
+    def write_data(self, data: list):
         return self.instance.write_data(data)

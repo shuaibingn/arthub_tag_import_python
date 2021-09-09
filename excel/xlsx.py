@@ -34,7 +34,8 @@ class XLSX(object):
 
         return res
 
-    def write_data(self, data: dict):
-        index = data.get("index")
-        self.ws.cell(index[0], index[1], "是")
+    def write_data(self, data: list):
+        for d in data:
+            index = d.get("index")
+            self.ws.cell(index[0], index[1], "是")
         self.wb.save(filename=self.filename)
