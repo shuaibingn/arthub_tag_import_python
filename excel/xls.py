@@ -40,4 +40,4 @@ class XLS(object):
         for d in data:
             index = d.get("index")
             self.xlwt_ws.write(index[0], index[1], "是")
-        self.xlwt_wb.save(self.filename)
+            self.xlwt_wb.save(self.filename)
