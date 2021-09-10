@@ -1,7 +1,10 @@
 default_settings = {
     "depot": "h3d",
     "domain": "http://arthub-api.h3d.com.cn",
-    "token": "2012b"
+    "token": "2012b",
+    "asset": {
+        "h3d": "100002"
+    },
 }
 
 is_recursion = "是否递归"
@@ -13,8 +16,5 @@ version = "版本"
 topic = "主题名"
 
 libs = ["设计库", "PSD库"]
-
-path1 = [top_folder, "原画", project, "lib", version, version, "商业化", topic]
-path2 = [top_folder, "原画", project, "lib", version, topic]
 
 tags = ["时间线", "款式", "风格", "颜色"]

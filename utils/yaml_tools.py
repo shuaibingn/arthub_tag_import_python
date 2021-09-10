@@ -11,4 +11,10 @@ def read_yaml(path: str) -> dict:
         d = yaml.load(content, Loader=yaml.FullLoader)
     except FileNotFoundError:
         d = default_settings
+        write_yaml(path, default_settings)
     return d
+
+
+def write_yaml(path: str, data: dict):
+    with open(path, "w") as f:
+        yaml.dump(data, f)
