@@ -12,8 +12,3 @@ def read_yaml(path: str) -> dict:
     except FileNotFoundError:
         d = default_settings
     return d
-
-
-def write_yaml(path: str, data: dict):
-    with open(path, "w") as f:
-        yaml.dump(data, f)
