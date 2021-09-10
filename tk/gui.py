@@ -1,4 +1,3 @@
-import logging
 import tkinter
 
 from tkinter.filedialog import askopenfilename
@@ -6,14 +5,12 @@ from tkinter.filedialog import askopenfilename
 from excel import Excel
 from api.arthub import ArtHub
 from utils.const import top_folder, project, version, topic, libs, tags, is_recursion
-from utils.exception import ArtHubException
 
 
 class TkGUI(object):
 
     def __init__(self, title, domain, depot, token, asset):
         self.asset = asset
-        self.depot = depot
         self.arthub = ArtHub(token, domain, depot)
 
         self.root = tkinter.Tk()
@@ -34,21 +31,17 @@ class TkGUI(object):
         self.excel_path = tkinter.StringVar()
         self.file_select()
 
-        # # 域名
-        # self.tk_domain = tkinter.StringVar()
-        # self.build_domain(domain)
-        #
-        # # 资源库
-        # self.tk_depot = tkinter.StringVar()
-        # self.build_depot(depot)
-        #
-        # # token
-        # self.tk_token = tkinter.StringVar()
-        # self.build_token(token)
+        # 单选框
+        self.radio_button_value = tkinter.StringVar()
+        self.radio_button_value.set(self.asset.get(depot))
+        self.check_button()
+
+        # 进度条
 
         self.build_start()
 
     def start(self):
+        depot = self.radio_button_value.get()
         ex = Excel(self.excel_path.get())
         excel_data = ex.read_data()
 
@@ -60,7 +53,7 @@ class TkGUI(object):
             success = True
             for p in path:
                 try:
-                    self.arthub.add_tag(p, self.asset.get(self.depot), tag_name, is_r)
+                    self.arthub.add_tag(p, self.asset.get(depot), tag_name, is_r)
                 except Exception as e:
                     print(f"path: {p}, error: {e.__str__()}")
                     success = False
@@ -101,20 +94,11 @@ class TkGUI(object):
         tkinter.Entry(self.root, textvariable=self.excel_path, width=30).grid(row=0, column=1)
         tkinter.Button(self.root, text="选择文件", command=self.select_path).grid(row=0, column=2)
 
-    # def build_domain(self, domain):
-    #     self.tk_domain.set(domain)
-    #     tkinter.Label(self.root, text="域名: ").grid(row=1, column=0, ipady=5)
-    #     tkinter.Entry(self.root, textvariable=self.tk_domain, width=30).grid(row=1, column=1)
-    #
-    # def build_depot(self, depot):
-    #     self.tk_depot.set(depot)
-    #     tkinter.Label(self.root, text="资源库: ").grid(row=2, column=0, ipady=5)
-    #     tkinter.Entry(self.root, textvariable=self.tk_depot, width=30).grid(row=2, column=1)
-    #
-    # def build_token(self, token):
-    #     self.tk_token.set(token)
-    #     tkinter.Label(self.root, text="token: ").grid(row=3, column=0, ipady=5)
-    #     tkinter.Entry(self.root, textvariable=self.tk_token, width=30).grid(row=3, column=1)
+    def check_button(self):
+        i = 0
+        for k, v in self.asset.items():
+            tkinter.Radiobutton(self.root, text=k, variable=self.radio_button_value, value=v).grid(row=1, column=i, ipady=5)
+            i += 1
 
     def build_start(self):
-        tkinter.Button(self.root, text="开始执行", command=self.start).grid(row=1, column=0)
+        tkinter.Button(self.root, text="开始执行", command=self.start).grid(row=2, column=0)
