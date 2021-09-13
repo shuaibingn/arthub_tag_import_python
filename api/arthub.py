@@ -3,6 +3,9 @@ from api.arthub_api import get_child_node_id_in_range, get_node_brief_by_id, get
 from utils.exception import ArtHubException, api_response_error, not_find_child_node, delete_tag_error, add_tag_error
 
 
+id_cache = {}
+
+
 class ArtHub(object):
 
     def __init__(self, token, domain, depot):
@@ -19,7 +22,7 @@ class ArtHub(object):
         return resp.get("result")
 
     def add_tag(self, path, folder_id, tag_name, is_recursion=False):
-        asset_folder_id = self.get_asset_folder_by_path(path, folder_id)
+        asset_folder_id = self.get_asset_folder_by_path(path, folder_id, "")
         asset_ids_list = self.get_asset_ids(asset_folder_id, is_recursion)
 
         for asset_id in asset_ids_list:
@@ -35,15 +38,21 @@ class ArtHub(object):
         nodes_detail_result = self.get_resp_result(nodes_detail_resp)
         return nodes_detail_result
 
-    def get_asset_folder_by_path(self, path: list, folder_id):
+    def get_asset_folder_by_path(self, path: list, folder_id, folder_name):
         if len(path) == 0:
             return folder_id
 
-        nodes_detail_result = self.get_child_node_detail_by_folder_id(folder_id)
         node_name = path[0]
+        folder_name += node_name + "."
+        cache_id = id_cache.get(folder_name)
+        if cache_id is not None:
+            return self.get_asset_folder_by_path(path[1:], cache_id, folder_name)
+
+        nodes_detail_result = self.get_child_node_detail_by_folder_id(folder_id)
         for x in nodes_detail_result.get("items"):
             if x.get("name") == node_name:
-                return self.get_asset_folder_by_path(path[1:], x.get("id"))
+                id_cache[folder_name] = x.get("id")
+                return self.get_asset_folder_by_path(path[1:], x.get("id"), folder_name)
 
         raise ArtHubException(not_find_child_node)
 
