@@ -73,7 +73,16 @@ class TkGUI(object):
         pb.grid(row=0, column=1)
 
         depot_id = self.radio_button_value.get()
-        ex = Excel(self.excel_path.get())
+
+        try:
+            ex = Excel(self.excel_path.get())
+        except Exception as e:
+            logger.error(f"file: {self.excel_path.get()}, error: {e}")
+            top_level.destroy()
+            tkinter.messagebox.showwarning(title="警告", message=e.__str__())
+            self.btn.configure(text="开始执行", state=NORMAL)
+            return
+
         excel_data = ex.read_data()
 
         pb["maximum"] = len(excel_data) * 2
