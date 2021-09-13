@@ -123,7 +123,7 @@ class TkGUI(object):
 
         ex.write_data(is_sync_data)
         top_level.destroy()
-        tkinter.messagebox.showinfo(title="上传成功", message=f"成功: {success_data}, 失败: {failed_data}, 共有: {success_data + failed_data}")
+        tkinter.messagebox.showinfo(title="上传结果", message=f"成功: {success_data}, 失败: {failed_data}, 共有: {success_data + failed_data}")
         self.btn.configure(text="开始执行", state=NORMAL)
 
     @staticmethod
