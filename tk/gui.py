@@ -1,3 +1,5 @@
+import logging
+
 import tkinter
 import tkinter.messagebox
 
@@ -8,6 +10,20 @@ from tkinter.filedialog import askopenfilename
 from excel import Excel
 from api.arthub import ArtHub
 from utils.const import top_folder, project, version, topic, libs, tags, is_recursion
+
+logger = logging.getLogger()
+logger.setLevel(level=logging.INFO)
+handler = logging.FileHandler("./log.txt", mode="a", encoding="utf-8")
+handler.setLevel(level=logging.INFO)
+
+formatter = logging.Formatter("%(asctime)s %(levelname)s %(lineno)d: %(message)s")
+handler.setFormatter(formatter)
+
+console = logging.StreamHandler()
+console.setLevel(level=logging.INFO)
+
+logger.addHandler(handler)
+logger.addHandler(console)
 
 
 class TkGUI(object):
@@ -40,14 +56,14 @@ class TkGUI(object):
         self.check_button()
 
         # 开始执行
-        self.btn = tkinter.Button(self.root, text="开始执行", command=self.start)
+        self.btn = tkinter.Button(self.root, text="开始执行", command=self.start, state=DISABLED)
         self.build_start()
 
     def start(self):
         # TopLevel
         top_level = tkinter.Toplevel()
         top_level.title("上传进度")
-        tkinter.Label(top_level,  text="上传进度: ").grid(row=0, column=0)
+        tkinter.Label(top_level, text="上传进度: ").grid(row=0, column=0)
 
         # 将按钮设置为不可点击状态
         self.btn.configure(text="正在操作...", state=DISABLED)
@@ -64,6 +80,7 @@ class TkGUI(object):
         pb["value"] = 0
 
         i = 1
+        success_data, failed_data = 0, 0
         is_sync_data = []
         for data in excel_data:
             pb["value"] = i
@@ -78,18 +95,26 @@ class TkGUI(object):
                 try:
                     self.arthub.add_tag(p, depot_id, tag_name, is_r)
                 except Exception as e:
-                    print(f"path: {p}, error: {e.__str__()}")
+                    logger.error(f"path: {p}, error: {e.__str__()}")
                     success = False
-                    continue
+                    if tkinter.messagebox.askokcancel(title="上传失败", message=f"数据: {data}, 上传失败, 失败原因: {e.__str__()}\n\n是否继续?"):
+                        continue
+                    else:
+                        top_level.destroy()
+                        self.btn.configure(text="开始执行", state=NORMAL)
+                        return
 
-                print(f"path: {p}, add tag success")
+                logger.info(f"path: {p}, add tag success")
 
             if success:
+                success_data += 1
                 is_sync_data.append(data)
+            else:
+                failed_data += 1
 
         ex.write_data(is_sync_data)
         top_level.destroy()
-        tkinter.messagebox.showinfo(title="上传成功", message="上传成功!!!")
+        tkinter.messagebox.showinfo(title="上传成功", message=f"成功: {success_data}, 失败: {failed_data}, 共有: {int((i + 1) / 2)}")
         self.btn.configure(text="开始执行", state=NORMAL)
 
     @staticmethod
@@ -114,6 +139,11 @@ class TkGUI(object):
 
     def select_path(self):
         self.excel_path.set(askopenfilename())
+        state = DISABLED
+        if self.excel_path.get() != "":
+            state = NORMAL
+
+        self.btn.configure(text="开始执行", state=state)
 
     def file_select(self):
         tkinter.Label(self.root, text="文件路径: ").grid(row=0, column=0, ipady=5)
@@ -123,7 +153,8 @@ class TkGUI(object):
     def check_button(self):
         i = 0
         for k, v in self.asset.items():
-            tkinter.Radiobutton(self.root, text=k, variable=self.radio_button_value, value=v).grid(row=1, column=i, ipady=5)
+            tkinter.Radiobutton(self.root, text=k, variable=self.radio_button_value, value=v).grid(row=1, column=i,
+                                                                                                   ipady=5)
             i += 1
 
     def build_start(self):
