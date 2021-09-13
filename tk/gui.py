@@ -114,7 +114,7 @@ class TkGUI(object):
 
         ex.write_data(is_sync_data)
         top_level.destroy()
-        tkinter.messagebox.showinfo(title="上传成功", message=f"成功: {success_data}, 失败: {failed_data}, 共有: {int((i + 1) / 2)}")
+        tkinter.messagebox.showinfo(title="上传成功", message=f"成功: {success_data}, 失败: {failed_data}, 共有: {success_data + failed_data}")
         self.btn.configure(text="开始执行", state=NORMAL)
 
     @staticmethod
@@ -153,8 +153,7 @@ class TkGUI(object):
     def check_button(self):
         i = 0
         for k, v in self.asset.items():
-            tkinter.Radiobutton(self.root, text=k, variable=self.radio_button_value, value=v).grid(row=1, column=i,
-                                                                                                   ipady=5)
+            tkinter.Radiobutton(self.root, text=k, variable=self.radio_button_value, value=v).grid(row=1, column=i, ipady=5)
             i += 1
 
     def build_start(self):
