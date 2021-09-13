@@ -76,22 +76,22 @@ class TkGUI(object):
         ex = Excel(self.excel_path.get())
         excel_data = ex.read_data()
 
-        pb["maximum"] = len(excel_data)
+        pb["maximum"] = len(excel_data) * 2
         pb["value"] = 0
 
         i = 1
         success_data, failed_data = 0, 0
         is_sync_data = []
         for data in excel_data:
-            pb["value"] = i
-            top_level.update()
-            i += 1
-
             path = self.fix_path(data)
             tag_name = [data.get(x) for x in tags]
             is_r = data.get(is_recursion)
             success = True
             for p in path:
+                pb["value"] = i
+                top_level.update()
+                i += 1
+
                 try:
                     self.arthub.add_tag(p, depot_id, tag_name, is_r)
                 except Exception as e:
