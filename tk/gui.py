@@ -56,7 +56,7 @@ class TkGUI(object):
         pb = Progressbar(top_level, length=200, mode="determinate", orient=HORIZONTAL)
         pb.grid(row=0, column=1)
 
-        depot = self.radio_button_value.get()
+        depot_id = self.radio_button_value.get()
         ex = Excel(self.excel_path.get())
         excel_data = ex.read_data()
 
@@ -76,7 +76,7 @@ class TkGUI(object):
             success = True
             for p in path:
                 try:
-                    self.arthub.add_tag(p, self.asset.get(depot), tag_name, is_r)
+                    self.arthub.add_tag(p, depot_id, tag_name, is_r)
                 except Exception as e:
                     print(f"path: {p}, error: {e.__str__()}")
                     success = False
