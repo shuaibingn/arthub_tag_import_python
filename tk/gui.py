@@ -1,5 +1,8 @@
 import tkinter
+import tkinter.messagebox
 
+from tkinter import HORIZONTAL, DISABLED, NORMAL
+from tkinter.ttk import Progressbar
 from tkinter.filedialog import askopenfilename
 
 from excel import Excel
@@ -36,17 +39,37 @@ class TkGUI(object):
         self.radio_button_value.set(self.asset.get(depot))
         self.check_button()
 
-        # 进度条
-
+        # 开始执行
+        self.btn = tkinter.Button(self.root, text="开始执行", command=self.start)
         self.build_start()
 
     def start(self):
+        # TopLevel
+        top_level = tkinter.Toplevel()
+        top_level.title("上传进度")
+        tkinter.Label(top_level,  text="上传进度: ").grid(row=0, column=0)
+
+        # 将按钮设置为不可点击状态
+        self.btn.configure(text="正在操作...", state=DISABLED)
+
+        # 进度条
+        pb = Progressbar(top_level, length=200, mode="determinate", orient=HORIZONTAL)
+        pb.grid(row=0, column=1)
+
         depot = self.radio_button_value.get()
         ex = Excel(self.excel_path.get())
         excel_data = ex.read_data()
 
+        pb["maximum"] = len(excel_data)
+        pb["value"] = 0
+
+        i = 1
         is_sync_data = []
         for data in excel_data:
+            pb["value"] = i
+            top_level.update()
+            i += 1
+
             path = self.fix_path(data)
             tag_name = [data.get(x) for x in tags]
             is_r = data.get(is_recursion)
@@ -65,6 +88,9 @@ class TkGUI(object):
                 is_sync_data.append(data)
 
         ex.write_data(is_sync_data)
+        top_level.destroy()
+        tkinter.messagebox.showinfo(title="上传成功", message="上传成功!!!")
+        self.btn.configure(text="开始执行", state=NORMAL)
 
     @staticmethod
     def fix_path(data) -> list:
@@ -101,4 +127,4 @@ class TkGUI(object):
             i += 1
 
     def build_start(self):
-        tkinter.Button(self.root, text="开始执行", command=self.start).grid(row=2, column=0)
+        self.btn.grid(row=2, column=0)
