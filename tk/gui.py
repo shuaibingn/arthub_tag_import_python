@@ -94,7 +94,7 @@ class TkGUI(object):
         for data in excel_data:
             path = self.fix_path(data)
             tag_name = [data.get(x) for x in tags]
-            is_r = data.get(is_recursion)
+            is_r = data.get(is_recursion) == "是"
             success = True
             for p in path:
                 pb["value"] = i
@@ -106,7 +106,7 @@ class TkGUI(object):
                 except Exception as e:
                     logger.error(f"path: {p}, error: {e.__str__()}")
                     success = False
-                    if tkinter.messagebox.askokcancel(title="上传失败", message=f"数据: {data}, 上传失败, 失败原因: {e.__str__()}\n\n是否继续?"):
+                    if tkinter.messagebox.askokcancel(title="上传失败", message=f"路径: {'/'.join(p)}\n\n失败原因: {e.__str__()}\n\n是否继续?"):
                         continue
                     else:
                         top_level.destroy()
