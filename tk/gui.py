@@ -121,7 +121,15 @@ class TkGUI(object):
             else:
                 failed_data += 1
 
-        ex.write_data(is_sync_data)
+        try:
+            ex.write_data(is_sync_data)
+        except Exception as e:
+            logger.error(e)
+            top_level.destroy()
+            tkinter.messagebox.showerror(title="错误", message="写入excel表格失败, 请尝试使用管理员身份运行")
+            self.root.destroy()
+            return
+
         top_level.destroy()
         tkinter.messagebox.showinfo(title="上传结果", message=f"成功: {success_data}, 失败: {failed_data}, 共有: {success_data + failed_data}")
         self.btn.configure(text="开始执行", state=NORMAL)
