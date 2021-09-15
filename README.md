@@ -25,4 +25,4 @@ pyinstaller.exe -w -F .\main.py
 ### 运行
 
 使用时建议使用管理员权限运行程序, 因为存在对文件的写操作, 在某些电脑上可能没有权限
-![以管理员身份运行](https://gitlab.h3d.com.cn/niushuaibing/arthub_tag_import_gui/tree/master/docs/以管理员身份运行.png)
+![以管理员身份运行](https://gitlab.h3d.com.cn/niushuaibing/arthub_tag_import_gui/blob/master/docs/%E4%BB%A5%E7%AE%A1%E7%90%86%E5%91%98%E8%BA%AB%E4%BB%BD%E8%BF%90%E8%A1%8C.png)
