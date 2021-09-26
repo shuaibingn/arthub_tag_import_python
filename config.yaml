@@ -1,7 +1,8 @@
 token: "2012b"
 domain: "http://arthub-api.h3d.com.cn"
 
-depot: "h3d"
+depot: "炫舞端游"
 
 asset:
+  炫舞端游: "100003"
   h3d: "100002"

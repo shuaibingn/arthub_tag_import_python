@@ -10,6 +10,7 @@ from tkinter.filedialog import askopenfilename
 from excel import Excel
 from api.arthub import ArtHub
 from utils.const import top_folder, project, version, topic, libs, tags, is_recursion
+from utils.exception import ArtHubException, InvalidDepotID
 
 logger = logging.getLogger()
 logger.setLevel(level=logging.INFO)
@@ -134,12 +135,22 @@ class TkGUI(object):
         tkinter.messagebox.showinfo(title="上传结果", message=f"成功: {success_data}, 失败: {failed_data}, 共有: {success_data + failed_data}")
         self.btn.configure(text="开始执行", state=NORMAL)
 
-    @staticmethod
-    def fix_path(data) -> list:
+    def fix_path(self, data) -> list:
         ver: str = data.get(version)
-        path = [top_folder, "原画", project, version, topic]
-        if ver.find("年") >= 0:
-            path = [top_folder, "原画", project, version, version, "商业化", topic]
+
+        depot_id = self.radio_button_value.get()
+        if depot_id == "100002":
+            path = [top_folder, "原画", project, version, topic]
+            if ver.find("年") >= 0:
+                path = [top_folder, "原画", project, version, version, "商业化", topic]
+
+        elif depot_id == "100003":
+            path = [project, "原画", version, topic]
+            if ver.find("年") >= 0:
+                path = [project, "原画", version, version, "商业化", topic]
+
+        else:
+            raise ArtHubException(InvalidDepotID)
 
         for i in range(len(path)):
             path[i] = data.get(path[i]) or path[i]

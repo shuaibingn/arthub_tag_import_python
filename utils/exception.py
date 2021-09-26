@@ -3,6 +3,7 @@ not_find_child_node = "没有找到目录"
 delete_tag_error = "删除旧标签失败"
 add_tag_error = "添加标签失败"
 NotSupportedFileType = "不支持的文件类型"
+InvalidDepotID = "无效的资源库"
 
 
 class ArtHubException(Exception):

@@ -1,8 +1,9 @@
 default_settings = {
-    "depot": "h3d",
+    "depot": "炫舞端游",
     "domain": "http://arthub-api.h3d.com.cn",
     "token": "2012b",
     "asset": {
+        "炫舞端游": "100003",
         "h3d": "100002"
     },
 }
