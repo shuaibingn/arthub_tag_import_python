@@ -1,8 +1,5 @@
-token: "2012b"
-domain: "http://arthub-api.h3d.com.cn"
-
-depot: "炫舞端游"
-
 asset:
-  炫舞端游: "100003"
-  h3d: "100002"
+  "\u70AB\u821E\u7AEF\u6E38": '100003'
+depot: "\u70AB\u821E\u7AEF\u6E38"
+domain: http://arthub-api.h3d.com.cn
+token: 2d4b9

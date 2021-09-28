@@ -11,7 +11,7 @@ class ArtHub(object):
     def __init__(self, token, domain, depot):
         self.header = {"publictoken": token}
         self.domain = domain
-        self.depot = depot
+        self.depot = "x51" if depot == "炫舞端游" else depot
 
     @staticmethod
     def get_resp_result(resp: dict):
@@ -50,7 +50,7 @@ class ArtHub(object):
 
         nodes_detail_result = self.get_child_node_detail_by_folder_id(folder_id)
         for x in nodes_detail_result.get("items"):
-            if x.get("name") == node_name:
+            if x.get("name").strip() == node_name:
                 id_cache[folder_name] = x.get("id")
                 return self.get_asset_folder_by_path(path[1:], x.get("id"), folder_name)
 

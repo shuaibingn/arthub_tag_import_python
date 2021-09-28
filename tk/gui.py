@@ -127,7 +127,7 @@ class TkGUI(object):
         except Exception as e:
             logger.error(e)
             top_level.destroy()
-            tkinter.messagebox.showerror(title="错误", message="写入excel表格失败, 请尝试使用管理员身份运行")
+            tkinter.messagebox.showerror(title="错误", message=f"写入excel表格失败, \n原因: {e}")
             self.root.destroy()
             return
 
@@ -160,7 +160,7 @@ class TkGUI(object):
 
         res = []
         for lib in libs:
-            p = path[:3] + [lib] + path[3:]
+            p = path[:2] + [lib] + path[2:]
             res.append(p)
 
         return res
